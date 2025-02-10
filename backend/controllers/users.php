@@ -1,21 +1,34 @@
 <?php
+header("Access-Control-Allow-Origin: *"); // Autorise toutes les origines (à restreindre en production)
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS"); // Autorise ces méthodes HTTP
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Autorise ces headers
+
+// Gérer les requêtes OPTIONS (prévol CORS)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 //global $pdo;
 require __DIR__ . '/../config/config.php'; // Inclusion du fichier de configuration pour la connexion à la base de données
 /** @var PDO $pdo */ //$pdo est bien une instance de PDO
 // Inscription d'un utilisateur
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['register'])) {
-    $name = $_POST['name'];  // Récupère le nom
-    $email = $_POST['email'];  // Récupère l'email
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);  // Hashage du mot de passe
+// Récupération des données JSON envoyées par Angular
+$data = json_decode(file_get_contents("php://input"), true);
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($data['action']) && $data['action'] === "register") {
+    $name = $data['name'];
+    $email = $data['email'];
+    $password = password_hash($data['password'], PASSWORD_DEFAULT);
 
     // Prépare et exécute l'insertion dans la base de données
     $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
     if ($stmt->execute([$name, $email, $password])) {
-        echo "Utilisateur enregistré avec succès.";  // Confirmation de l'inscription
+        echo json_encode(["message" => "Utilisateur enregistré avec succès"]);
     } else {
-        echo "Erreur lors de l'inscription.";  // Message d'erreur si l'insertion échoue
+        echo json_encode(["error" => "Erreur lors de l'inscription"]);
     }
 }
+
 
 // Connexion d'un utilisateur
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['login'])) {
