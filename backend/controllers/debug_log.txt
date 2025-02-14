@@ -1,0 +1,8 @@
+Array
+(
+    [action] => login
+    [email] => teste1@gmail.com
+    [password] => 1007Mame
+)
+Password en base: $2y$10$7spMlRrNVZVhTbzp86wq5uJGNC2wuR1J1fU.d7J.ODwAW.kMUzHEe
+Password entré: 1007Mame
