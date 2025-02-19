@@ -1,8 +1,8 @@
 Array
 (
     [action] => login
-    [email] => teste1@gmail.com
-    [password] => 1007Mame
+    [email] => teste4@gmail.com
+    [password] => 123456789
 )
-Password en base: $2y$10$7spMlRrNVZVhTbzp86wq5uJGNC2wuR1J1fU.d7J.ODwAW.kMUzHEe
-Password entré: 1007Mame
+Password en base: $2y$10$L.z8H1bSynMUGjGvlIxVa.ezEebR8xlqzQkcsWAd2Bqxh0C6ZE/oO
+Password entré: 123456789

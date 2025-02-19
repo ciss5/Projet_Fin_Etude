@@ -1,35 +1,41 @@
 <?php
-//global $pdo;
-require __DIR__ . '/../config/config.php';
-/** @var PDO $pdo */ //$pdo est bien une instance de PDO
-//var_dump($pdo);
-// Ajouter une réservation
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['reserve'])) {
-    $user_id = $_POST['user_id'];
-    $date = $_POST['date'];
-    $time = $_POST['time'];
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-    // Vérifier si l'horaire est déjà pris
-    $stmt = $pdo->prepare("SELECT * FROM reservations WHERE date = ? AND time = ?");
-    $stmt->execute([$date, $time]);
-    if ($stmt->rowCount() > 0) {
-        echo "Cet horaire est déjà réservé.";
-        exit;
-    }
-
-    // Ajouter la réservation
-    $stmt = $pdo->prepare("INSERT INTO reservations (user_id, date, time) VALUES (?, ?, ?)");
-    if ($stmt->execute([$user_id, $date, $time])) {
-        echo "Réservation enregistrée.";
-    } else {
-        echo "Erreur lors de la réservation.";
-    }
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
 }
 
-// Obtenir la liste des réservations
-if ($_SERVER["REQUEST_METHOD"] === "GET") {
-    $stmt = $pdo->query("SELECT reservations.*, users.name FROM reservations JOIN users ON reservations.user_id = users.id ORDER BY date, time");
-    $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode($reservations);
+require __DIR__ . '/../config/config.php';
+/** @var PDO $pdo */
+
+$data = json_decode(file_get_contents("php://input"), true);
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!isset($data['user_id'], $data['date'], $data['time'])) {
+        echo json_encode(["status" => "error", "message" => "Données manquantes."]);
+        exit();
+    }
+
+    $user_id = $data['user_id'];
+    $date = $data['date'];
+    $time = $data['time'];
+
+    $stmt = $pdo->prepare("SELECT * FROM reservations WHERE date = ? AND time = ?");
+    $stmt->execute([$date, $time]);
+
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(["status" => "error", "message" => "Cet horaire est déjà réservé."]);
+        exit();
+    }
+
+    $stmt = $pdo->prepare("INSERT INTO reservations (user_id, date, time) VALUES (?, ?, ?)");
+    if ($stmt->execute([$user_id, $date, $time])) {
+        echo json_encode(["status" => "success", "message" => "Réservation enregistrée."]);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Erreur lors de la réservation."]);
+    }
 }
 ?>
