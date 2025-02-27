@@ -59,14 +59,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit();
     }
 
-    //Gestion des actions admin (approve/cancel)
+      //Gestion des actions admin (approve/cancel)
     if (isset($data['action'], $data['reservation_id'])) {
         $reservation_id = $data['reservation_id'];
 
         if ($data['action'] === 'approve') {
             $stmt = $pdo->prepare("UPDATE reservations SET status = 'approved' WHERE id = ?");
         } elseif ($data['action'] === 'cancel') {
-            $stmt = $pdo->prepare("UPDATE reservations SET status = 'canceled' WHERE id = ?");
+            $stmt = $pdo->prepare("UPDATE reservations SET status = 'cancelled' WHERE id = ?");
         } else {
             echo json_encode(["status" => "error", "message" => "Action inconnue."]);
             exit();
