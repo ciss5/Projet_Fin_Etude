@@ -1,0 +1,19 @@
+<h2>Réserver un créneau</h2>
+<form (ngSubmit)="onReserve()">
+  <label>Date :</label>
+  <input type="date" [(ngModel)]="date" name="date" required />
+
+  <label>Heure :</label>
+  <input type="time" [(ngModel)]="time" name="time" required />
+
+  <button type="submit">Réserver</button>
+</form>
+<p>{{ message }}</p>
+
+<h2>Liste des Réservations</h2>
+<ul>
+  <li *ngFor="let res of reservations">
+    {{ res.name }} - {{ res.date }} à {{ res.time }} ({{ res.status }})
+  </li>
+</ul>
+
