@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300;600&family=Bebas+Neue&display=swap');
+
+/* Style général */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #222;
+  color: white;
+  padding: 10px 20px;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 60px;
+  height: auto;
+  margin-right: 10px;
+  border-radius:50px;
+}
+/*nom salon*/
+.salon-name {
+  font-family: 'Great Vibes', cursive;
+  font-size: 42px;
+  font-weight: 400;
+  color: #D4AF37;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Menu */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+}
+
+/* Boutons Login et Sign Up */
+.btn {
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+/* Burger menu (caché en grand écran) */
+.burger-menu {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Mode responsive (mobile) */
+@media screen and (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  /* Afficher le menu quand menuOpen est actif */
+  .nav-links.active {
+    display: flex;
+  }
+
+  .burger-menu {
+    display: block;
+  }
+}
