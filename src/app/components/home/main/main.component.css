@@ -106,6 +106,7 @@
   display: flex;
   justify-content: center;
   gap: 40px;
+  flex-wrap: wrap;
 }
 
 .team-member {
@@ -130,7 +131,9 @@
 .team-member p {
   font-size: 18px;
 }
-
+.discover{
+  margin-top:20px;
+}
 /* === ANIMATIONS === */
 @keyframes fadeInUp {
   from {
