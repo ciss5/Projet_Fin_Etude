@@ -20,15 +20,16 @@
   <!-- Détails du service sélectionné -->
   <div class="prestation-details text-center mt-4 p-4">
     <h3>{{ selectedService.title }}</h3>
-    <div class="row">
-      <div class="col-md-4" *ngFor="let key of ['femme', 'homme', 'enfant']">
-        <img [src]="selectedService.details[key].image" class="details-img">
-        <h4>{{ key | titlecase }}</h4>
-        <p>{{ selectedService.details[key].text }}</p>
-      </div>
+    <div class="row justify-content-center">
+      <ng-container *ngFor="let key of ['femme', 'homme', 'enfant']">
+        <div class="col-md-4" *ngIf="selectedService.details[key]">
+          <img [src]="selectedService.details[key].image" class="details-img">
+          <h4>{{ key | titlecase }}</h4>
+          <p>{{ selectedService.details[key].text }}</p>
+        </div>
+      </ng-container>
     </div>
   </div>
-
   <!-- Section Tarifs -->
   <h2 class="text-center mt-5">Nos Tarifs</h2>
 
@@ -44,3 +45,4 @@
     </div>
   </div>
 </div>
+
