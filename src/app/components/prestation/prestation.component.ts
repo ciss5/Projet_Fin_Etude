@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgFor } from '@angular/common';
 import { NavbarComponent } from '../home/navbar/navbar.component';
+import { ViewportScroller } from '@angular/common'; // Importez ViewportScroller
 
 @Component({
   selector: 'app-prestation',
@@ -9,7 +10,7 @@ import { NavbarComponent } from '../home/navbar/navbar.component';
   styleUrls: ['./prestation.component.css'],
   imports: [CommonModule, NgFor, NavbarComponent]
 })
-export class PrestationComponent {
+export class PrestationComponent implements OnInit { // Implémentez OnInit
   services = [
     {
       title: "Coupe",
@@ -82,7 +83,7 @@ export class PrestationComponent {
       details: {
         femme: {
           text: "Lissage brésilien pour une chevelure lisse et brillante.",
-          image: "assets/images/prestation/femme/lissage1.jpg",
+          image: "assets/images/prestation/femme/lissage.jpg",
         }
       }
     }
@@ -107,7 +108,16 @@ export class PrestationComponent {
   categories: Array<'dames' | 'hommes' | 'enfants'> = ['dames', 'hommes', 'enfants'];
   selectedService: any = this.services[0];
 
+  // Injectez ViewportScroller dans le constructeur
+  constructor(private viewportScroller: ViewportScroller) {}
+
+  // Implémentez ngOnInit pour déclencher le défilement vers le haut
+  ngOnInit(): void {
+    this.viewportScroller.scrollToPosition([0, 0]); // Défile vers le haut de la page
+  }
+
   selectService(service: any) {
     this.selectedService = service;
+    //this.viewportScroller.scrollToPosition([0, 0]); // Défile vers le haut après la sélection
   }
 }
