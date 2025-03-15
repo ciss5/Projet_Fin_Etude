@@ -13,42 +13,79 @@ export class PrestationComponent {
   services = [
     {
       title: "Coupe",
-      image: "assets/images/prestation/coupe.jpg",
+      image: "assets/images/prestation/femme/coupe.jpg",
       description: "Une coupe adaptée à votre style et votre morphologie.",
       details: {
         femme: {
           text: "Coupe tendance et adaptée à votre visage.",
-          image: "assets/images/details/femme-coupe.jpg"
+          image: "assets/images/prestation/femme/coupe1.jpg",
         },
         homme: {
           text: "Coupe moderne ou classique pour hommes.",
-          image: "assets/images/details/homme-coupe.jpg"
+          image: "assets/images/prestation/homme/coupe.jpg"
         },
         enfant: {
           text: "Coupe enfant adaptée et facile à entretenir.",
-          image: "assets/images/details/enfant-coupe.jpg"
+          image: "assets/images/prestation/enfant/coupe1home.jpg"
         }
       }
     },
     {
-      title: "texte",
-      image: "assets/images/prestation/coupe.jpg",
+      title: "Coiffure",
+      image: "assets/images/prestation/femme/coiffure.jpg",
       description: "Une coupe adaptée à votre style et votre morphologie.",
       details: {
         femme: {
-          text: "Coupe tendance et adaptée à votre visage.",
-          image: "assets/images/details/femme-coupe.jpg"
+          text: "Coiffure élégante et personnalisée.",
+          image: "assets/images/prestation/femme/coiffure1.jpg",
         },
         homme: {
-          text: "Coupe moderne ou classique pour hommes.",
-          image: "assets/images/details/homme-coupe.jpg"
+          text: "Style soigné pour toutes occasions.",
+          image: "assets/images/prestation/homme/coiffure.jpg"
         },
         enfant: {
-          text: "Coupe enfant adaptée et facile à entretenir.",
-          image: "assets/images/details/enfant-coupe.jpg"
+          text: "Coiffure enfant adaptée et tendance.",
+          image: "assets/images/prestation/enfant/coiffure.jpg"
         }
       }
     },
+    {
+      title: "Soin",
+      image: "assets/images/prestation/femme/soin.jpg",
+      description: "Des soins capillaires nourrissants et réparateurs.",
+      details: {
+        femme: {
+          text: "Soin profond pour cheveux abîmés.",
+          image: "assets/images/prestation/femme/soin1.jpg",
+        },
+        homme: {
+          text: "Traitement revitalisant pour cheveux masculins.",
+          image: "assets/images/prestation/homme/soin.jpg"
+        },
+      }
+    },
+    {
+      title: "Perruques",
+      image: "assets/images/prestation/femme/perruque.jpg",
+      description: "Large choix de perruques naturelles et synthétiques.",
+      details: {
+        femme: {
+          text: "Styles variés et confortables.",
+          image: "assets/images/prestation/femme/perruque1.jpg",
+        },
+      }
+    },
+    {
+      title: "Lissage",
+      image: "assets/images/prestation/femme/lissage.jpg",
+      description: "Un lissage professionnel pour des cheveux soyeux.",
+      details: {
+        femme: {
+          text: "Lissage brésilien pour une chevelure lisse et brillante.",
+          image: "assets/images/prestation/femme/lissage1.jpg",
+        }
+      }
+    }
   ];
 
   tarifs = {
@@ -73,5 +110,4 @@ export class PrestationComponent {
   selectService(service: any) {
     this.selectedService = service;
   }
-
 }

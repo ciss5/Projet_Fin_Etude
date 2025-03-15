@@ -1,3 +1,5 @@
+
+/* Styles pour la prestation-card */
 .prestation-container {
   padding: 40px 20px;
 }
@@ -40,24 +42,54 @@
   left: 0;
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
   background: rgba(0, 0, 0, 0.7);
+=======
+>>>>>>> Dev1
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+<<<<<<< HEAD
   opacity: 0;
   transition: opacity 0.3s;
 }
 
 .prestation-card:hover .overlay {
   opacity: 1;
+=======
+ /*opacity: 0;*/
+  /*transition: opacity 0.3s;*/
+}
+/* La descriptioncachée  */
+.overlay p {
+  opacity: 0;
+  transition: opacity 0.3s;
+  text-align: center;
+}
+
+/* Afficher la description au survol */
+.prestation-card:hover .overlay p {
+  opacity: 1;
+}
+.overlay p {
+  text-align: center;
+}
+.prestation-card:hover .overlay {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.7);
+>>>>>>> Dev1
 }
 
 .prestation-details {
   background: black;
   color: white;
   border-radius: 10px;
+<<<<<<< HEAD
+=======
+
+>>>>>>> Dev1
 }
 
 .details-img {
