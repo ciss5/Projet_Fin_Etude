@@ -41,7 +41,7 @@ export class PrestationComponent {
         },
         homme: {
           text: "Style soigné pour toutes occasions.",
-          image: "assets/images/prestation/homme/coiffure.jpg"
+          image: "assets/images/prestation/homme/coupe1.jpg",
         },
         enfant: {
           text: "Coiffure enfant adaptée et tendance.",
