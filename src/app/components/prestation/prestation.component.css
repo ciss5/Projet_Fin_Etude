@@ -119,6 +119,7 @@
   margin-bottom: 10px;
   background: #333; /* Gris foncé classe */
   color: white;
+  cursor: pointer;
 }
 
 /* Titre de la prestation */
@@ -136,4 +137,5 @@
   color: #222;
   border-radius: 8px;
   font-weight: bold;
+  cursor: pointer;
 }

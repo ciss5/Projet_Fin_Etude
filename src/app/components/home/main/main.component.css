@@ -62,8 +62,11 @@
   display: flex;
   width: 80%;
   align-items: center;
-}
 
+}
+.about-image{
+  width: 50%;
+}
 .about-image img {
   width: 100%;
   max-width: 500px;
@@ -73,6 +76,7 @@
 
 .about-text {
   margin-left: 40px;
+  width: 50%;
 }
 
 .about-text h2 {
@@ -83,6 +87,7 @@
 .about-text p {
   font-size: 18px;
   margin-top: 10px;
+
 }
 
 .about-text .btn-booking {
