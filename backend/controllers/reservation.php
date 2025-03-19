@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit();
     }
 
-      //Gestion des actions admin (approve/cancel)
+    //Gestion des actions admin (approve/cancel)
     if (isset($data['action'], $data['reservation_id'])) {
         $reservation_id = $data['reservation_id'];
 
