@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require __DIR__ . '/../config/config.php';
+require __DIR__ . '/../mail.php'; // Inclusion du fichier mail
+
 /** @var PDO $pdo */
 
 $data = json_decode(file_get_contents("php://input"), true);
@@ -52,10 +54,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Insérer la réservation
         $stmt = $pdo->prepare("INSERT INTO reservations (user_id, date, time, status) VALUES (?, ?, ?, 'pending')");
         if ($stmt->execute([$user_id, $date, $time])) {
-            echo json_encode(["status" => "success", "message" => "Réservation enregistrée."]);
+            // Récupérer l'email de l'utilisateur
+            $stmt = $pdo->prepare("SELECT email FROM users WHERE id = ?");
+            $stmt->execute([$user_id]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user && isset($user['email'])) {
+                $to = $user['email'];
+                $subject = "Confirmation de votre réservation";
+                $message = "Bonjour, votre réservation pour le <strong>$date à $time</strong> a été enregistrée.";
+                sendEmail($to, $subject, $message);
+            }
+
+            echo json_encode(["status" => "success", "message" => "Réservation enregistrée et email envoyé."]);
         } else {
             echo json_encode(["status" => "error", "message" => "Erreur lors de la réservation."]);
         }
+
         exit();
     }
 
@@ -74,14 +89,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // Exécution de la requête
         if ($stmt->execute([$reservation_id])) {
-            // Vérification après mise à jour
+            // Récupérer l'email et les détails de la réservation
+            $stmt = $pdo->prepare("
+        SELECT users.email, reservations.date, reservations.time 
+        FROM reservations
+        JOIN users ON reservations.user_id = users.id
+        WHERE reservations.id = ?
+    ");
+            $stmt->execute([$reservation_id]);
+            $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($reservation && isset($reservation['email'])) {
+                $statusText = ($data['action'] === 'approve') ? "approuvée" : "annulée";
+                $to = $reservation['email'];
+                $subject = "Mise à jour de votre réservation";
+                $message = "Bonjour, votre réservation pour le <strong>{$reservation['date']} à {$reservation['time']}</strong> a été <strong>$statusText</strong>.";
+                sendEmail($to, $subject, $message);
+            }
+
             $check_stmt = $pdo->prepare("SELECT status FROM reservations WHERE id = ?");
             $check_stmt->execute([$reservation_id]);
             $updated_status = $check_stmt->fetch(PDO::FETCH_ASSOC);
 
             echo json_encode([
                 "status" => "success",
-                "message" => "Action effectuée avec succès.",
+                "message" => "Action effectuée avec succès et email envoyé.",
                 "updated_status" => $updated_status['status']
             ], JSON_THROW_ON_ERROR);
         } else {
