@@ -9,10 +9,10 @@ function sendEmail($to, $subject, $message) {
     try {
         // Configuration du serveur SMTP
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; //
+        $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'mamegorciss5@gmail.com'; // Ton email
-        $mail->Password = 'qegbdkzqdnlcfzzn'; // Ton mot de passe SMTP
+        $mail->Username = 'mamegorciss5@gmail.com';
+        $mail->Password = 'qegbdkzqdnlcfzzn'; // mot de passe SMTP
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 

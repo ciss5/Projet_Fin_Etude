@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require __DIR__ . '/../config/config.php';
-require __DIR__ . '/../mail.php'; // Inclusion du fichier mail
+require __DIR__ . '/../mail.php';
 
 /** @var PDO $pdo */
 
