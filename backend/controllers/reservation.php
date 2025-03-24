@@ -18,20 +18,20 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
   $stmt = $pdo->prepare("
-    SELECT reservations.*, users.name AS user_name
+    SELECT reservations.*, users.name AS user_name, users.email AS user_email
     FROM reservations
     JOIN users ON reservations.user_id = users.id
-");
+  ");
   $stmt->execute();
   $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
   echo json_encode($reservations ?: ["status" => "error", "message" => "Aucune réservation trouvée."]);
   exit;
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if (!isset($data['action'])) {
-    if (!isset($data['user_id'], $data['date'], $data['time'])) {
+    if (!isset($data['user_id'], $data['date'], $data['time'], $data['end_time'])) {
       echo json_encode(["status" => "error", "message" => "Données manquantes."]);
       exit();
     }
@@ -39,29 +39,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user_id = $data['user_id'];
     $date = $data['date'];
     $time = $data['time'];
+    $endTime = $data['end_time'];
 
-    $stmt = $pdo->prepare("SELECT * FROM reservations WHERE date = ? AND time = ?");
-    $stmt->execute([$date, $time]);
+    // Vérifier si un créneau chevauche cette réservation
+    $stmt = $pdo->prepare("SELECT * FROM reservations WHERE date = ? AND (time < ? AND end_time > ?)");
+    $stmt->execute([$date, $endTime, $time]);
 
     if ($stmt->rowCount() > 0) {
-      echo json_encode(["status" => "error", "message" => "Cet horaire est déjà réservé."]);
+      echo json_encode(["status" => "error", "message" => "Ce créneau est déjà réservé."]);
       exit();
     }
 
-    $stmt = $pdo->prepare("INSERT INTO reservations (user_id, date, time, status) VALUES (?, ?, ?, 'pending')");
-    if ($stmt->execute([$user_id, $date, $time])) {
-      $stmt = $pdo->prepare("SELECT email FROM users WHERE id = ?");
-      $stmt->execute([$user_id]);
-      $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-      if ($user && isset($user['email'])) {
-        $to = $user['email'];
-        $subject = "Confirmation de votre réservation";
-        $message = "Bonjour, votre réservation pour le <strong>$date à $time</strong> a été enregistrée.";
-        sendEmail($to, $subject, $message);
-      }
-
-      echo json_encode(["status" => "success", "message" => "Réservation enregistrée et email envoyé."]);
+    // Insérer la réservation avec l'heure de fin
+    $stmt = $pdo->prepare("INSERT INTO reservations (user_id, date, time, end_time, status) VALUES (?, ?, ?, ?, 'pending')");
+    if ($stmt->execute([$user_id, $date, $time, $endTime])) {
+      echo json_encode(["status" => "success", "message" => "Réservation enregistrée avec succès."]);
     } else {
       echo json_encode(["status" => "error", "message" => "Erreur lors de la réservation."]);
     }
@@ -103,9 +95,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $updated_status = $check_stmt->fetch(PDO::FETCH_ASSOC);
 
       echo json_encode([
-        "status" => "success",
-        "message" => "Action effectuée avec succès et email envoyé.",
-        "updated_status" => $updated_status['status']
+          "status" => "success",
+          "message" => "Action effectuée avec succès et email envoyé.",
+          "updated_status" => $updated_status['status']
       ], JSON_THROW_ON_ERROR);
     } else {
       echo json_encode(["status" => "error", "message" => "Erreur lors de l'exécution de l'action."]);
