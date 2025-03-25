@@ -28,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
   exit;
 }
 
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if (!isset($data['action'])) {
     if (!isset($data['user_id'], $data['date'], $data['time'], $data['end_time'])) {
@@ -41,9 +40,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $time = $data['time'];
     $endTime = $data['end_time'];
 
+    // Vérification des horaires de réservation
+    $reservationDate = new DateTime($date);
+    $reservationDay = $reservationDate->format('l'); // Récupérer le jour de la semaine (ex. Monday)
+    $startTime = DateTime::createFromFormat('H:i', $time);
+    $endTime = DateTime::createFromFormat('H:i', $endTime);
+
+    // Définir les heures limites de réservation
+    $startHour = new DateTime('09:00');
+    $endHour = new DateTime('19:00');
+
+    // Vérification si le jour est autorisé
+    if ($reservationDay == 'Monday') {
+      echo json_encode(["status" => "error", "message" => "Les réservations sont fermées le lundi."]);
+      exit();
+    }
+
+    // Vérifier si l'heure de début et l'heure de fin sont dans les horaires autorisés
+    if ($startTime < $startHour || $endTime > $endHour) {
+      echo json_encode(["status" => "error", "message" => "Les réservations doivent être effectuées entre 09h00 et 19h00."]);
+      exit();
+    }
+
     // Vérifier si un créneau chevauche cette réservation
     $stmt = $pdo->prepare("SELECT * FROM reservations WHERE date = ? AND (time < ? AND end_time > ?)");
-    $stmt->execute([$date, $endTime, $time]);
+    $stmt->execute([$date, $endTime->format('H:i'), $startTime->format('H:i')]);
 
     if ($stmt->rowCount() > 0) {
       echo json_encode(["status" => "error", "message" => "Ce créneau est déjà réservé."]);
@@ -52,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Insérer la réservation avec l'heure de fin
     $stmt = $pdo->prepare("INSERT INTO reservations (user_id, date, time, end_time, status) VALUES (?, ?, ?, ?, 'pending')");
-    if ($stmt->execute([$user_id, $date, $time, $endTime])) {
+    if ($stmt->execute([$user_id, $date, $time, $endTime->format('H:i')])) {
       echo json_encode(["status" => "success", "message" => "Réservation enregistrée avec succès."]);
     } else {
       echo json_encode(["status" => "error", "message" => "Erreur lors de la réservation."]);
