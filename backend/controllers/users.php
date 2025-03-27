@@ -60,7 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 "user" => [
                     "id" => $user['id'],
                     "name" => $user['name'],
-                    "email" => $user['email']
+                    "email" => $user['email'],
+                    "role" => $user['role'] //role => admin
                 ]
             ], JSON_THROW_ON_ERROR);
         } else {
