@@ -1,59 +1,129 @@
-# SalonCoiffure
+# 💇‍♀️ Mon Salon de Coiffure - Système de Réservation en Ligne
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.7.
+## 🧠 Présentation
 
-## Development server
+Ce projet est une application web complète pour un salon de coiffure permettant aux **clients** de réserver un créneau et aux **administrateurs** de gérer les réservations.  
+Il a été réalisé dans le cadre d'un projet de fin d'études avec Angular, PHP et MySQL.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## 🎯 Objectifs fonctionnels
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### 🔒 Utilisateurs :
+- Créer un compte et se connecter.
+- Consulter les disponibilités (dates/horaires).
+- Effectuer ou annuler une réservation.
+- Recevoir une confirmation après réservation.
 
-## Code scaffolding
+### 🧑‍💼 Administrateurs :
+- Se connecter avec un compte admin.
+- Accéder à la liste des réservations.
+- Approuver ou annuler une réservation.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 🛠️ Général :
+- Interface intuitive.
+- Gestion des erreurs (ex. : créneau déjà réservé).
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🧰 Contraintes techniques
 
-```bash
-ng generate --help
-```
+- **Frontend** : Angular, HTML, CSS
+- **Backend** : PHP
+- **Base de données** : MySQL
 
-## Building
+### 🖥️ Compatibilité
+- Navigateurs : Chrome, Firefox
+- Responsive : Oui (ordinateur / smartphone)
 
-To build the project run:
+### 🔐 Sécurité
+- Validation des entrées pour éviter les failles XSS/SQL
+- Hachage des mots de passe (`password_hash()` en PHP)
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 📅 Déroulement du projet
 
-## Running unit tests
+| Phase         | Description                                | Durée        |
+|---------------|--------------------------------------------|--------------|
+| Phase 1       | Planification,approfondure  Angular        | Semaines 1-2 |
+| Phase 2       | Backend en PHP + connexion base de données | Semaines 3-4 |
+| Phase 3       | Frontend Angular + pages HTML/CSS          | Semaines 5-7 |
+| Phase 4       | Tests & rédaction documentation            | Semaine 8    |
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+---
 
-```bash
-ng test
-```
+## 🗃️ Modèle de données (Base de données)
 
-## Running end-to-end tests
+### 🔸 Table `users`
+| Champ     | Type     | Détail         |
+|-----------|----------|----------------|
+| id        | int      | Primary key    |
+| name      | varchar  | Nom complet    |
+| email     | varchar  | Unique         |
+| password  | varchar  | Haché          |
+| role      | varchar  |'user'ou'admin' |
 
-For end-to-end (e2e) testing, run:
+### 🔹 Table `reservations`
+| Champ     | Type     | Détail                    |
+|-----------|----------|---------------------------|
+| id        | int      | Primary key               |
+| user_id   | int      | Foreign key → users.id    |
+| date      | date     | Date de la réservation    |
+| time      | time     | Heure de début            |
+| end_time  | time     | Heure de fin              |
+| status    | varchar  |pending/approved/cancelled |
 
-```bash
-ng e2e
-```
+## 🎨 Design & Maquettes
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Accueil
+- Présentation du salon
+- Bouton "Se connecter" / "S'inscrire"
 
-## Additional Resources
+### Réservation (Client)
+- Sélection de la date et heure
+- Confirmation ou message d’erreur
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### Tableau de bord (Admin)
+- Liste des réservations
+- Boutons : Approuver / Annuler
+
+## 👤 Guide Utilisateur
+
+### 💁‍♂️ Pour les clients :
+1. Créer un compte via la page d'inscription.
+2. Se connecter avec son email et mot de passe.
+3. Consulter les créneaux disponibles.
+4. Faire une réservation.
+5. Annuler si besoin via l'historique.
+6. Recevoir une confirmation par email.
+
+### 👨‍💼 Pour les administrateurs :
+1. Se connecter avec un compte admin.
+2. Accéder au tableau de bord.
+3. Voir toutes les réservations.
+4. Approuver ou annuler une réservation.
+5. Un email automatique est envoyé à l'utilisateur.
+
+## ⚙️ Guide Technique
+
+### 📂 Structure des dossiers :
+
+### 📡 Backend (PHP)
+- `users.php` : Connexion, inscription, vérification admin
+- `reservation.php` : Création, annulation, approbation
+
+### ⚙️ Frontend (Angular)
+- `auth.service.ts` : Authentification & rôle admin
+- `admin.guard.ts` : Protège les routes réservées aux admins
+- `calendar.component.ts` : Affiche les créneaux avec FullCalendar
+- `reservation.component.ts` : Formulaire client
+
+### 🧪 Tests
+- Tests manuels avec différents rôles
+- Vérification responsive
+- Tests de conflits (double réservation)
+
+---
+
+---
